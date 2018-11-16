@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Filestack</title>
+</head>
+<body>
+  <script src="https://static.filestackapi.com/filestack-js/1.x.x/filestack.min.js"></script>
+  
+  <script>
+
+      // defining variables 
+      const apikey = 'A9ZaZkmYdSYuVVWVsY6q6z';
+      const client = filestack.init(apikey);
+
+
+      // playground
+
+      // function playground () {
+      // //  var dogs = ['pug', 'labs', 'setters'];
+      // //  var multipleSshit = dogs.map(el => el * 3);
+      // //  var hhh = dogs.indexOf()
+      // //  var fff = document.createElement('div');
+      // //  console.log(hhh)
+      // var att = document.getElementsByClassName("prova");
+      // var born = document.createElement("div")
+      // born.innerHTML = 'SSSSS';
+      // }
+
+      // playground();
+
+
+
+      window.addEventListener('DOMContentLoaded', function () {
+      const options = {
+        maxFiles: 5,
+        uploadInBackground: false,
+        onOpen: () => console.log('opened!'),
+        onUploadDone: (res) => {
+          // logging the reponse if it's all good
+          console.log(res);
+          displayFile(res);
+        },
+        onClose: function() {console.log('prova')}
+      };
+      
+      client.picker(options).open();
+      
+          function displayFile(res) {
+
+            // identify the response element
+            let fileData = res.filesUploaded;
+            
+            //  defining constants regarding the type of the file uploaded
+            const imageArray = ['png', 'jpg', 'jpeg'];
+            const documentArray = ['json', 'pdf', 'vnd.ms-powerpoint', 'vnd.ms-powerpoint', 'msword', 'vnd.openxmlformats-officedocument.wordprocessingml.document', 'vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'vnd.ms-excel', 'octet-stream', 'html', 'plain']; 
+            
+                          
+            // rendering the common structure (clickable name of the file) 
+            // regardless of the type of file uploaded 
+            fileData.forEach(element => {
+            console.log(element)
+            const domContainer = document.getElementById('thumbnail-container');
+            let containerCreate = document.createElement("a");
+            containerCreate.setAttribute("id", element.uploadId);
+            containerCreate.className = "container";
+            containerCreate.href = element.url;
+            containerCreate.target = "_blank";
+            domContainer.appendChild(containerCreate);
+            let p = document.createElement("p");
+            p.innerText = element.filename;
+            containerCreate.appendChild(p);
+            
+            // uploading an image
+            if (imageArray.indexOf(element.mimetype.split('/')[1]) !== -1) {
+                let container = document.getElementById(element.uploadId);
+                let thumbnail = new Image();
+                thumbnail.id = 'thumbnail';
+                thumbnail.src = client.transform(element.handle, {
+                  resize: {
+                    width: 200
+                  }
+                })
+                container.appendChild(thumbnail);
+            }
+            // uploading a document
+            else if (documentArray.indexOf(element.mimetype.split('/')[1]) !== -1) {
+                client.preview(element.handle, {id: element.uploadId})
+            }
+            // uploading anything else (will trigger the download)
+            else {
+              console.log('different kind of file uploaded')
+            }
+            
+          });
+        // logging the upload files to check properties for further development enhancement 
+        console.log(fileData);
+        }  
+    })
+      
+  </script>
+  
+  <div id="title">Filestack</div>
+      <div id="thumbnail-container">
+  </div>
+
+
+</body>
+</html>
+

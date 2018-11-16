@@ -1,0 +1,38 @@
+body {
+    font-size: 34px;
+    background-color: aliceblue;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+p {
+    margin-right: 15px;
+}
+
+a {
+    margin-bottom: 20px;
+}
+
+iframe {
+    max-width: 30vw;
+    height: 400px;
+}
+
+
+
+#title {
+    margin: 30px;
+    font-weight: bold;
+    color: blue
+}
+
+.container {
+    display: flex;
+    text-align: center;
+    justify-content: center
+}
+
+
+p {
+    font-size: 20px;
+}
