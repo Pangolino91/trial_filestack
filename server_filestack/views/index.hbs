@@ -8,14 +8,30 @@
     <title>Filestack</title>
 </head>
 <body>
+    
+  <div id="title">Filestack</div>
+      <div id="thumbnail-container">
+          <input type="file" id="myFile" value="upload your file" 
+            method="post"
+            onchange="myFunction()"
+            enctype="multipart/form-data"
+            >
+          <p id="demo"></p>
+  </div>
+
   <script src="https://static.filestackapi.com/filestack-js/1.x.x/filestack.min.js"></script>
   
   <script>
+    
+      window.config = {
+        apiKey: "{{apiKey}}"
+    }
+
 
       // defining variables 
-      const apikey = 'A9ZaZkmYdSYuVVWVsY6q6z';
-      const client = filestack.init(apikey);
-
+      //const apikey = 'A9ZaZkmYdSYuVVWVsY6q6z';
+      const client = filestack.init(window.config.apiKey);
+    
 
 
       window.addEventListener('DOMContentLoaded', function () {
@@ -84,12 +100,56 @@
         console.log(fileData);
         }  
     })
-      
+
+
+        function myFunction(){
+    var x = document.getElementById("myFile");
+    var txt = "";
+    if ('files' in x) {
+        if (x.files.length == 0) {
+            txt = "Select one or more files.";
+        } else {
+            for (var i = 0; i < x.files.length; i++) {
+                txt += "<br><strong>" + (i+1) + ". file</strong><br>";
+                var file = x.files[i];
+                if ('name' in file) {
+                    txt += "name: " + file.name + "<br>";
+                }
+                if ('size' in file) {
+                    txt += "size: " + file.size + " bytes <br>";
+                }
+            }
+        }
+    } 
+    else {
+        if (x.value == "") {
+            txt += "Select one or more files.";
+        } else {
+            txt += "The files property is not supported by your browser!";
+            txt  += "<br>The path of the selected file: " + x.value; // If the browser does not support the files property, it will return the path of the selected file instead. 
+        }
+    }
+    document.getElementById("demo").innerHTML = txt;
+    console.log(myFile.files);
+
+    let upFile = document.getElementById("myFile").files[0] // get file from input
+
+        let formData = new FormData();
+        formData.append("file", upFile);        
+        // formData.append("user", JSON.stringify(user));   // you can add also some json data to formData like e.g. user = {name:'john', age:34}
+
+        let req = new XMLHttpRequest();
+        req.open("POST", 'http://localhost:3000/files');
+        req.send(formData);
+        console.log(req)
+        }
+
+    
+
+
   </script>
   
-  <div id="title">Filestack</div>
-      <div id="thumbnail-container">
-  </div>
+
 
 
 </body>
