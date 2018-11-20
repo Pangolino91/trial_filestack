@@ -5,8 +5,12 @@ var router = express.Router();
 //   res.send('Hello wolrd');
 // });
 
+router.get('/', function(req, res, next) {
+    res.send('hello!');
+});
+
 router.post('/files', function(req, res, next) {
-    console.log(req.files)
+    console.log('request', req.body);
 });
 
 module.exports = router;
