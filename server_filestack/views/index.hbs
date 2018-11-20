@@ -140,7 +140,7 @@
     console.log(myFile.files);
 
     let upFile = document.getElementById("myFile").files[0] // get file from input
-
+    console.log(upFile);
         let formData = new FormData();
         formData.append("file", upFile);        
         // formData.append("user", JSON.stringify(user));   // you can add also some json data to formData like e.g. user = {name:'john', age:34}

@@ -29,4 +29,19 @@ router.get('/', function(req, res, next) {
   res.render('index', { apiKey });
 });
 
+router.post("/files", function(req, res, next) {
+  // console.log("request", req.fields);
+  // console.log("requested files", req.files.file);
+  var buffer = req.files.file.data;
+    console.log(req.files.file);
+    minioClient.putObject('files', 'hello-file', buffer, function(err, etag) {
+    console.log(err, etag);
+    return res.send(200);
+    });
+    
+});
+
+
+
+
 module.exports = router;
